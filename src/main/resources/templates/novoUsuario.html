@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Usuário - Inclusão</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <style>
+            #demo{ color: red;
+                   font-family: cursive;
+                   font-size: 20px;
+                   margin: auto;                  
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>Usuário - Inclusão</h1>
+
+            <form action="#" th:action="@{/usuarios/salvarUsuario}" th:object ="${usuarios}" method="POST" onsubmit="Verificar(this); return false;">
+
+                <div class="form-group row">
+                    <label for="txtNome" class="col-sm-2 col-form-label">UserName</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nome"  class="form-control" required th:field ="*{userName}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="txtNome" class="col-sm-2 col-form-label">Nome Completo</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nome" class="form-control" required th:field ="*{nomeCompleto}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="txtNome" class="col-sm-2 col-form-label">Senha</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="nome" class="form-control" required th:field ="*{senha}" >
+                    </div>
+                </div>
+
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">Status</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" required name="status" id="optDisponivelSim" value="Ativado" th:field ="*{status}">
+                                <label class="form-check-label" for="optDisponivelSim">
+                                    Ativado
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="status" id="optDisponivelNao" value="Desativado" th:field ="*{status}">
+                                <label class="form-check-label" for="optDisponivelNao">
+                                    Desativado
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>          
+
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">Papéis</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline" th:if="${papel != null}"
+                                 th:each="papeis : ${papel}">
+                                <input class="form-check-input" type="checkbox" name="idsPapeis" th:value="${papeis.id}" th:field="*{idsPapeis}" onchange="Oncha()">
+                                <label class="form-check-label" th:text="${papeis.nome}" th:for="${#ids.prev('idsPapeis')}">
+                                </label>
+                            </div>
+                            <p id="demo"></p>
+                        </div>
+                </fieldset>
+
+                <input type="hidden" th:field ="*{dataHora}">       
+                <center>
+                    <div>
+                        <button type="submit" class="btn btn-success col-2"> Salvar</button>
+
+                        <a th:href="@{/usuarios/user}" role="button" class="btn btn-danger col-2">Cancelar</a>
+                    </div>
+                </center>
+
+            </form>
+
+        </div>
+        <script>
+            function Oncha() {
+                var papeis = document.getElementsByName("idsPapeis");
+                if (papeis[0].checked == true || papeis[1].checked == true || papeis[2].checked == true || papeis[3].checked == true) {
+                    document.getElementById("demo").style.display = 'none';
+                } else {
+                    document.getElementById("demo").style.display = 'block';
+                }
+            }
+
+
+            function Verificar(frm) {
+                var text;
+                var papeis = document.getElementsByName("idsPapeis");
+
+                if (papeis[0].checked == true || papeis[1].checked == true || papeis[2].checked == true || papeis[3].checked == true) {
+                    frm.submit();
+                } else {
+                    text = "selecione uma das opções";
+                    document.getElementById("demo").innerHTML = text;
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>
